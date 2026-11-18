@@ -2,7 +2,10 @@
 <html lang="ca">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#24582a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Visites d’obra</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -54,6 +57,41 @@ pre{overflow-x:auto;font-size:.78rem;background:var(--bg);padding:10px;border-ra
 .nc{margin:0 0 12px;padding-left:20px}.nc li{margin:3px 0}.nc li.empty{list-style:none;margin-left:-20px;color:var(--muted)}
 .logo{display:inline-block;background:#fff;border-radius:8px;padding:6px 12px;margin:8px 0 4px}.logo img{display:block;height:auto;max-width:100%}
 .msg{font-size:.85rem;color:var(--muted);min-height:1.2em;text-align:center}
+
+/* ---- Adaptació a mòbil ---- */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{touch-action:manipulation;-webkit-tap-highlight-color:transparent;overscroll-behavior-y:contain;overflow-x:hidden}
+main{width:100%;padding:12px 12px calc(125px + env(safe-area-inset-bottom,0px))}
+section{padding:12px;border-radius:10px}
+.grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))}
+input[type=text],input[type=date],select,textarea{font-size:16px;min-height:46px;min-width:0;max-width:100%;border-radius:8px}
+input[type=date]{display:block;width:100%}
+select{text-overflow:ellipsis}
+textarea{min-height:110px}
+.loc input{flex:1;min-width:0}
+.loc button{min-height:46px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg span{display:block;min-width:0;min-height:46px;padding:11px 4px;font-size:1rem}
+.item{padding:12px 0}
+.item p{font-size:1rem;line-height:1.35}
+.attach{display:flex;align-items:center;justify-content:center;width:100%;min-height:46px;font-size:1rem}
+.photos{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.ph img{height:110px}
+.ph button{width:34px;height:34px;font-size:18px}
+.ph input{font-size:16px;padding:8px}
+h2{font-size:1.1rem}
+h3{font-size:1.05rem;padding:10px 12px}
+canvas{height:170px}
+img,canvas{max-width:100%}
+.bar{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px))}
+.bar .msg{grid-column:1/-1}
+.bar button{min-height:48px;width:100%;font-size:1rem}
+.msg:empty{display:none}
+.bar{gap:6px;padding:8px 12px calc(8px + env(safe-area-inset-bottom,0px))}
+.bar button{min-height:44px}
+:root:not([data-theme="light"]) button.p{color:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) button.p{color:#0b1417}}
+@media(min-width:700px){.bar{display:flex}.bar button{width:auto}}
 </style>
 </head>
 <body>
@@ -178,9 +216,9 @@ upd();
 // ubicació en directe
 function geo(){
  const u=$("ubicacion");
- if(!navigator.geolocation){u.placeholder="Aquest dispositiu no permet obtenir la ubicació. Escriu-la a mà.";return}
+ if(!navigator.geolocation){u.placeholder="Sense ubicació: escriu-la a mà";return}
  u.placeholder="Cercant la ubicació…";
- navigator.geolocation.getCurrentPosition(p=>{u.value=p.coords.latitude.toFixed(5)+", "+p.coords.longitude.toFixed(5);upd()},()=>{u.placeholder="No s’ha pogut obtenir. Permet l’accés a la ubicació o escriu-la a mà."},{enableHighAccuracy:true,timeout:15000,maximumAge:0});
+ navigator.geolocation.getCurrentPosition(p=>{u.value=p.coords.latitude.toFixed(5)+", "+p.coords.longitude.toFixed(5);upd()},()=>{u.placeholder="Sense ubicació: escriu-la a mà"},{enableHighAccuracy:true,timeout:15000,maximumAge:0});
 }
 $("geo").onclick=geo;geo();
 
@@ -265,6 +303,7 @@ $("send").onclick=async()=>{
  b.disabled=false;
 };
 
+document.addEventListener("gesturestart",e=>e.preventDefault());
 </script>
 </body>
 </html>
