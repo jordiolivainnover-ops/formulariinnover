@@ -64,7 +64,7 @@ pre{overflow-x:auto;font-size:.78rem;background:var(--bg);padding:10px;border-ra
 
 <section><h2>Dades de la visita</h2>
 <div class="grid">
-<label class="f">Projecte / instal·lació<select id="proyecto"><option value="">Carregant obres…</option></select></label>
+<label class="f">Projecte / instal·lació<input type="text" id="proyecto" placeholder="Escriu el nom de l’obra"></label>
 <label class="f">Ubicació<span class="loc"><input type="text" id="ubicacion" placeholder="Cercant la ubicació…"><button class="b" type="button" id="geo">Actualitzar</button></span></label>
 <label class="f">Data<input type="date" id="fecha"></label>
 <label class="f">Motiu de la visita<select id="motiu"><option value="">Selecciona…</option><option>Inici d’obra</option><option>Seguiment d’obra</option><option>Fi d’obra</option></select></label>
@@ -187,7 +187,7 @@ $("geo").onclick=geo;geo();
 // PDF
 async function buildPdf(){
  const d=collect();
- if(!d.proyecto){msg("Selecciona el projecte abans de continuar.");$("proyecto").focus();return null}
+ if(!d.proyecto){msg("Escriu el nom del projecte abans de continuar.");$("proyecto").focus();return null}
  const doc=new window.jspdf.jsPDF({unit:"mm",format:"a4"}),M=15,W=180,CX=[M,M+135,M+150,M+165];
  const T=s=>String(s||"").replace(/\u2019/g,"'");
  const G=[60,99,42],LINE=[196,203,199],GREY=[238,241,239];
@@ -265,22 +265,6 @@ $("send").onclick=async()=>{
  b.disabled=false;
 };
 
-async function loadObres(){
- const el=$("proyecto");
- try{
-  const r=await fetch("/api/obres");if(!r.ok)throw new Error("llista");
-  const list=await r.json();
-  el.innerHTML="";
-  const first=document.createElement("option");first.value="";first.textContent="Selecciona l’obra…";el.appendChild(first);
-  list.forEach(o=>{const op=document.createElement("option");op.value=o.name;op.textContent=o.name;el.appendChild(op)});
-  try{const sv=JSON.parse(localStorage.getItem(KEY)||"null");if(sv&&sv.raw.proyecto)el.value=sv.raw.proyecto}catch(e){}
- }catch(e){
-  const i=document.createElement("input");i.type="text";i.id="proyecto";i.placeholder="No s’ha pogut carregar la llista: escriu l’obra";
-  i.addEventListener("input",upd);el.replaceWith(i);
- }
- upd();
-}
-loadObres();
 </script>
 </body>
 </html>
