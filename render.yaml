@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: visites-obra
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: APP_USER
+        value: visites
+      - key: APP_PASSWORD
+        sync: false
+      - key: MONDAY_API_TOKEN
+        sync: false
+      - key: BOARD_OBRES_ID
+        sync: false
+      - key: BOARD_VISITES_ID
+        sync: false
